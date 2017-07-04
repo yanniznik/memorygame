@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Memory Game</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+
+<h1>Memory Game</h1>
+
+<div class="container" id="container"></div>
+
+<body>
+	<script>
+
+		// SETTING VARIABLES
+
+		var allCards = [];
+		var selectedCards = [];
+		var toVictory = 0;
+		var flipCounter = 0;
+
+		// STARTING GAME
+
+		function startGame() {
+			setUp();
+			randomize();
+		}
+
+		// CREATING CARDS
+
+		function setUp() {
+			for (var i = 1; i < 12; i++) {
+				allCards[i] = new card(i);
+				allCards[i+1] = new card(i);
+				allCards[i].create()
+				allCards[i+1].create()
+				allCards[i].addClick();
+				allCards[i+1].addClick();
+				i++
+			}
+		}
+
+		// RANDOMIZE BOARD
+
+		function randomize() {
+			var cont = document.getElementById("container");
+			for (var i = cont.children.length; i >= 0; i--) {
+				cont.appendChild(cont.children[Math.random() * i | 0]);
+			}
+		}
+
+		// MAIN CARD OBJECT
+
+		function card(id) {
+			var flipC = document.createElement("div");
+			this.id = id;
+			this.isFlipped = 0;
+			this.isFound = 0;
+			
+			this.flip = function() {
+				this.isFlipped = 1;
+				flipC.classList.add("hover");
+				selectedCards.push(this.id);
+				gameHandler();
+			}
+			this.unflip = function() {
+				this.isFlipped = 0;
+				flipC.classList.remove("hover");
+			}
+
+			this.create = function() {
+				var mainC = document.createElement("div");
+				mainC.setAttribute("class", "col-md-3");
+				flipC.classList.add("flip-container");
+				flipC.setAttribute("class", "flip-container")
+				var flipper = document.createElement("div");
+				flipper.setAttribute("class","flipper");
+				var front = document.createElement("div");
+				front.setAttribute("class", "front");
+				var back = document.createElement("div");
+				back.setAttribute("class", "front");
+				back.style.backgroundImage = "url('img/texture.jpg')";
+				front.style.backgroundImage = "url('img/"+id+".jpg')";
+				flipper.appendChild(front);
+				flipper.appendChild(back);
+				flipC.appendChild(flipper);
+				mainC.appendChild(flipC);
+				document.getElementById("container").appendChild(mainC);
+			}
+			this.addClick = function() {
+				flipC.addEventListener('click', this.flip.bind(this), false)
+
+			}
+		}
+
+		// GAME HANDLER
+
+		function gameHandler() {
+			flipCounter += 1;
+
+			if (selectedCards[0] == selectedCards[1] && flipCounter == 2) {
+				flipCounter = 0;
+				toVictory += 2;
+				allCards[selectedCards[0]].isFound = 1;
+				allCards[selectedCards[1]+1].isFound = 1;
+				selectedCards = [];
+			}
+
+			if (toVictory == allCards.length - 1) {
+				console.log("WON");
+			}
+			
+			else if (selectedCards[0] != selectedCards[1] && flipCounter == 2) {
+				flipCounter = 0;
+				selectedCards = [];
+				setTimeout(function() {
+					for (var i = 1; i < allCards.length; i++) {
+						if (allCards[i].isFlipped == 1 && allCards[i].isFound == 0 ) {
+							allCards[i].unflip() ;
+						}
+					}
+				}, 1000)	
+			}
+		}
+
+		startGame();
+
+	</script>
+
+	<style>
+
+		body {
+			background-image: url(img/bg.jpg);
+			background-size: cover;
+		}
+
+		h1 {
+			text-align: center;
+			margin-top: 30px;
+			margin-bottom: 0;
+		}
+
+		div#container {
+			margin-top: 30px;
+		}
+
+
+		.flip-container {
+			perspective: 1000px;
+
+		}
+		.flip-container.hover .flipper {
+			transform: rotateY(180deg);
+		}
+
+		.flip-container, .front, .back {
+			width: 100%;
+			height: 225px;
+		}
+
+		.flip-container {
+			margin: 10px 0;
+		}
+
+		
+
+		.flipper {
+			transition: 0.6s;
+			transform-style: preserve-3d;
+
+			position: relative;
+		}
+
+		.front, .back {
+			position: absolute;
+			top: 0;
+			left: 0;
+			background-size: cover;
+			-webkit-box-shadow: 0 3px 2px rgba(127, 127, 127, 0.38);
+			-moz-box-shadow: 0 3px 2px rgba(127, 127, 127, 0.38);
+			box-shadow: 0 3px 2px rgba(127, 127, 127, 0.38);
+			border-radius: 25px;
+			border: 15px solid #e9e1c9;
+
+		}
+
+		.front {
+			z-index: 2;
+			transform: rotateY(0deg);
+		}
+
+		.back {
+			transform: rotateY(180deg);
+		}
+
+		.flip-container {
+			margin: 15px 0;
+		}
+	</style>
+</body>
