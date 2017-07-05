@@ -7,7 +7,37 @@
 	<link rel="stylesheet" href="style.css">
 </head>
 <h1>Memory Game</h1>
-<div class="container" id="container"></div>
+<div class="container">
+	<div class="row">
+		<div class="col-md-3 sidebar">
+				<h3>Score: <span id="score">0</span></h3>
+				<hr>
+				<h3>Tries: <span id="tries">0</span></h3>
+				<hr>
+				<div class="well">
+				<select name="select" class="form-control" id="select">
+					<option value="1">Theme 1 - Normal</option>
+					<option value="2">Theme 2 - Birds</option>
+					<option value="3">Theme 3 - Monuments</option>
+				</select>
+
+				<hr>
+				<div id="difficulty">
+				<h3 class="hideSmall">Difficulty</h3>
+					<button value="6" class="difficulty btn btn-warning">1</button>
+					<button value="8" class="difficulty btn btn-warning">2</button>
+					<button value="10" class="difficulty btn btn-warning">3</button>
+					<button value="12" class="difficulty selected btn btn-warning">4</button>
+
+				</div>
+				<hr>
+				<button id="newgame" class="btn btn-primary btn-block">New Game</button>
+				</div>
+				<p id="won" class="bg-success" style="display: none;">You won!</p>
+		</div>
+		<div class="col-md-9" id="container"></div>
+	</div>
+</div>
 <body>
 	<script src="memorygame.js"></script>
 </body>
