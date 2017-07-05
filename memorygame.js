@@ -33,8 +33,8 @@
 	// THEME HANDLER
 
 	function themeHandler() {
-			var sel = document.getElementById("select");
-			theme = sel.options[sel.selectedIndex].value;
+		var sel = document.getElementById("select");
+		theme = sel.options[sel.selectedIndex].value;
 	}
 
 	// COUNTERS 
@@ -96,6 +96,7 @@
 	}
 
 	// MAIN CARD OBJECT
+	var pauseThis = false;
 
 	function card(id) {
 		var flipC = document.createElement("div");
@@ -104,10 +105,21 @@
 		this.isFound = 0;
 
 		this.flip = function() {
-			this.isFlipped = 1;
-			flipC.classList.add("hover");
-			selectedCards.push(this.id);
-			gameHandler();
+			
+			if (flipCounter == 2) {
+					pauseThis = true;
+				}
+			if (!pauseThis) {
+				flipCounter += 1;
+				this.isFlipped = 1;
+				flipC.classList.add("hover");
+				selectedCards.push(this.id);
+				gameHandler();
+			}
+			else {
+				console.log("testing");
+			}
+			
 		}
 		this.unflip = function() {
 			this.isFlipped = 0;
@@ -116,7 +128,7 @@
 
 		this.create = function() {
 			var mainC = document.createElement("div");
-			mainC.setAttribute("class", "col-md-3 col-xs-6");
+			mainC.setAttribute("class", "col-md-3 col-sm-4 col-xs-6");
 			flipC.classList.add("flip-container");
 			flipC.setAttribute("class", "flip-container")
 			var flipper = document.createElement("div");
@@ -135,28 +147,32 @@
 		}
 		this.addClick = function() {
 			flipC.addEventListener('click', this.flip.bind(this), false)
-
 		}
+
 	}
 
 	// GAME HANDLER
 
 	function gameHandler() {
-		flipCounter += 1;
-
+		if (flipCounter == 2) {
+			pauseThis = true;
+		}
 		if (selectedCards[0] == selectedCards[1] && flipCounter == 2) {
 			flipCounter = 0;
 			toVictory += 2;
-			score =+1;
+			score += 1;
 			allCards[selectedCards[0]].isFound = 1;
 			allCards[selectedCards[1] + 1].isFound = 1;
 			selectedCards = [];
+			pauseThis = false;
 		}
 
 		if (toVictory == allCards.length - 1) {
 			console.log("WON");
 			document.getElementById("won").classList.add("showme");
-		} else if (selectedCards[0] != selectedCards[1] && flipCounter == 2) {
+		} 
+		if (selectedCards[0] != selectedCards[1] && flipCounter == 2) {
+			
 			flipCounter = 0;
 			tryCounter += 1;
 			selectedCards = [];
@@ -166,9 +182,12 @@
 	                	allCards[i].unflip();
 	                }
 	            }
-	        }, 1000)
+	        pauseThis = false;
+	        }, 500)
 		}
+		
 		counter();
+		console.log("updating counter");
 	}
 
 	startGame();
