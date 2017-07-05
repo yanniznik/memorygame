@@ -65,10 +65,11 @@
 
 	function newGame() {
 		document.getElementById("newgame").addEventListener("click", function() {
-			if (confirm("Are you sure you want to restart?")) {
+			
 				themeHandler();
 				startGame();
-			}
+				console.log("triggered");
+		
 		})
 	}
 
@@ -116,9 +117,7 @@
 				selectedCards.push(this.id);
 				gameHandler();
 			}
-			else {
-				console.log("testing");
-			}
+			
 			
 		}
 		this.unflip = function() {
@@ -168,7 +167,6 @@
 		}
 
 		if (toVictory == allCards.length - 1) {
-			console.log("WON");
 			document.getElementById("won").classList.add("showme");
 		} 
 		if (selectedCards[0] != selectedCards[1] && flipCounter == 2) {
@@ -187,7 +185,6 @@
 		}
 		
 		counter();
-		console.log("updating counter");
 	}
 
 	startGame();
