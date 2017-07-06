@@ -1,56 +1,62 @@
-		var theme = 1;
-		var allCards = [];
-		var selectedCards = [];
-		var toVictory = 0;
-		var flipCounter = 0;
-		var tryCounter = 0;
-		var score = 0;
-		var difficulty = 12;
+	var MemoryGame = {};
+
+	MemoryGame.theme = 1 
+	MemoryGame.allCards = [];
+	MemoryGame.selectedCards = [];
+	MemoryGame.toVictory = 0;
+	MemoryGame.flipCounter = 0;
+	MemoryGame.tryCounter = 0;
+	MemoryGame.score = 0;
+	MemoryGame.difficulty = 12;
+	MemoryGame.pauseThis = false;
+	document.getElementById("newgame").addEventListener("click", function() {
+		MemoryGame.startGame();
+	});
 
 	// STARTING GAME
 
-	function startGame() {
-		cleanUp();
-		setUp();
-		randomize();
-		newGame();
-		changeDifficulty();
+	MemoryGame.startGame = function() {
+		MemoryGame.cleanUp();
+		MemoryGame.themeHandler();
+		MemoryGame.changeDifficulty();
+		MemoryGame.setUp();
+		MemoryGame.randomize();
 	}
 
 	// GENERAL CLEAN UP
 
-	function cleanUp() {
+	MemoryGame.cleanUp = function() {
 		document.getElementById("container").innerHTML = '';
 		document.getElementById("won").classList.remove("showme");
-		allCards = [];
-		selectedCards = [];
-		toVictory = 0;
-		flipCounter = 0;
-		tryCounter = 0;
-		score = 0;
+		MemoryGame.allCards = [];
+		MemoryGame.selectedCards = [];
+		MemoryGame.toVictory = 0;
+		MemoryGame.flipCounter = 0;
+		MemoryGame.tryCounter = 0;
+		MemoryGame.score = 0;
 	}
 
 	// THEME HANDLER
 
-	function themeHandler() {
+	MemoryGame.themeHandler = function() {
 		var sel = document.getElementById("select");
 		theme = sel.options[sel.selectedIndex].value;
 	}
 
 	// COUNTERS 
 
-	function counter() {
-		document.getElementById("tries").innerHTML = tryCounter;
-		document.getElementById("score").innerHTML = score;
+	MemoryGame.counter = function() {
+		document.getElementById("tries").innerHTML = MemoryGame.tryCounter;
+		document.getElementById("score").innerHTML = MemoryGame.score;
 	}
 
 	// DIFFICULTY HANDLER
 
-	function changeDifficulty() {
+	MemoryGame.changeDifficulty = function() {
 		var buttons = document.getElementsByClassName("difficulty");
 		for (var i = 0; i < buttons.length; i++) {
 			buttons[i].addEventListener("click", function() {
-				difficulty = this.value;
+				MemoryGame.difficulty = this.value;
 				var selectedElements = document.getElementsByClassName("selected");
 				for (var i = 0; i < selectedElements.length; i++) {
 					selectedElements[i].classList.remove("selected")
@@ -58,76 +64,56 @@
 				this.classList.add("selected")
 			})
 		}
-
-	}
-
-	// NEW GAME
-
-	function newGame() {
-		document.getElementById("newgame").addEventListener("click", function() {
-			
-				themeHandler();
-				startGame();
-				console.log("triggered");
-		
-		})
 	}
 
 	// CREATING CARDS
 
-	function setUp() {
-		for (var i = 1; i < difficulty; i++) {
-			allCards[i] = new card(i);
-			allCards[i + 1] = new card(i);
-			allCards[i].create()
-			allCards[i + 1].create()
-			allCards[i].addClick();
-			allCards[i + 1].addClick();
-			i++
+	MemoryGame.setUp = function() {
+		for (var i = 1; i < MemoryGame.difficulty; i++) {
+			MemoryGame.allCards[i] = new MemoryGame.card(i);
+			MemoryGame.allCards[i + 1] = new MemoryGame.card(i);
+			MemoryGame.allCards[i].create()
+			MemoryGame.allCards[i + 1].create()
+			MemoryGame.allCards[i].addClick();
+			MemoryGame.allCards[i + 1].addClick();
+			i++;
 		}
 	}
 
 	// RANDOMIZE BOARD
 
-	function randomize() {
-		var cont = document.getElementById("container");
-		for (var i = cont.children.length; i >= 0; i--) {
-			cont.appendChild(cont.children[Math.random() * i | 0]);
+	MemoryGame.randomize = function() {
+		var cont1 = document.getElementById("container");
+		for (var i = cont1.children.length; i >= 0; i--) {
+			cont1.appendChild(cont1.children[Math.random() * i | 0]);
 		}
 	}
 
 	// MAIN CARD OBJECT
-	var pauseThis = false;
 
-	function card(id) {
+	MemoryGame.card = function(id) {
 		var flipC = document.createElement("div");
 		this.id = id;
 		this.isFlipped = 0;
 		this.isFound = 0;
-
-		this.flip = function() {
-			
-			if (flipCounter == 2) {
-					pauseThis = true;
+		this.flip = function() {			
+			if (MemoryGame.flipCounter == 2) {
+					MemoryGame.pauseThis = true;
 				}
-			if (!pauseThis) {
-				flipCounter += 1;
+			if (!MemoryGame.pauseThis) {
+				MemoryGame.flipCounter += 1;
 				this.isFlipped = 1;
 				flipC.classList.add("hover");
-				selectedCards.push(this.id);
+				MemoryGame.selectedCards.push(this.id);
 				flipC.style.pointerEvents = "none";
-				gameHandler();
-				
-			}
-			
-			
+				MemoryGame.gameHandler();	
+			}		
 		}
 		this.unflip = function() {
 			this.isFlipped = 0;
 			flipC.classList.remove("hover");
 			flipC.style.pointerEvents = "auto";
 		}
-
 		this.create = function() {
 			var mainC = document.createElement("div");
 			mainC.setAttribute("class", "col-md-3 col-sm-4 col-xs-6");
@@ -150,45 +136,43 @@
 		this.addClick = function() {
 			flipC.addEventListener('click', this.flip.bind(this), false)
 		}
-
 	}
 
 	// GAME HANDLER
 
-	function gameHandler() {
-		if (flipCounter == 2) {
-			pauseThis = true;
+	MemoryGame.gameHandler = function() {
+		if (MemoryGame.flipCounter == 2) {
+			MemoryGame.pauseThis = true;
 		}
-		if (selectedCards[0] == selectedCards[1] && flipCounter == 2) {
-			flipCounter = 0;
-			toVictory += 2;
-			score += 1;
-			allCards[selectedCards[0]].isFound = 1;
-			allCards[selectedCards[1] + 1].isFound = 1;
-			selectedCards = [];
-			pauseThis = false;
+		if (MemoryGame.selectedCards[0] == MemoryGame.selectedCards[1] && MemoryGame.flipCounter == 2) {
+			MemoryGame.flipCounter = 0;
+			MemoryGame.toVictory += 2;
+			MemoryGame.score += 1;
+			MemoryGame.allCards[MemoryGame.selectedCards[0]].isFound = 1;
+			MemoryGame.allCards[MemoryGame.selectedCards[1] + 1].isFound = 1;
+			MemoryGame.selectedCards = [];
+			MemoryGame.pauseThis = false;
 		}
 
-		if (toVictory == allCards.length - 1) {
+		if (MemoryGame.toVictory == MemoryGame.allCards.length - 1) {
 			document.getElementById("won").classList.add("showme");
 		} 
-		if (selectedCards[0] != selectedCards[1] && flipCounter == 2) {
+		if (MemoryGame.selectedCards[0] != MemoryGame.selectedCards[1] && MemoryGame.flipCounter == 2) {
 			
-			flipCounter = 0;
-			tryCounter += 1;
-			selectedCards = [];
+			MemoryGame.flipCounter = 0;
+			MemoryGame.tryCounter += 1;
+			MemoryGame.selectedCards = [];
 			setTimeout(function() {
-				for (var i = 1; i < allCards.length; i++) {
-	                if (allCards[i].isFlipped == 1 && allCards[i].isFound == 0) { // unflip only flipped cards that are not found
-	                	allCards[i].unflip();
+				for (var i = 1; i < MemoryGame.allCards.length; i++) {
+	                if (MemoryGame.allCards[i].isFlipped == 1 && MemoryGame.allCards[i].isFound == 0) { // unflip only flipped cards that are not found
+	                	MemoryGame.allCards[i].unflip();
 
 	                }
 	            }
-	        pauseThis = false;
+	        MemoryGame.pauseThis = false;
 	        }, 500)
 		}
-		
-		counter();
+		MemoryGame.counter();
 	}
 
-	startGame();
+	MemoryGame.startGame();
