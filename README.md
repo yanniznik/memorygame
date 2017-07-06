@@ -1,11 +1,11 @@
-# memorygame in Vanilla JS
-Simple memory-based game with JS. And puppies.
+# Memory Game in Vanilla JS
+Simple memory-based game with JS with additional theme and difficult functionalities.
 
-# demo
+# Demo
 Check it on [Codepen](https://codepen.io/yananas/pen/OgEdmN).
 
-## Fork
-Feel free to fork it!
+## Credits
+David Walsch for the [CSS flip animation](https://davidwalsh.name/css-flip).
 
 
 
