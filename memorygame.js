@@ -115,7 +115,9 @@
 				this.isFlipped = 1;
 				flipC.classList.add("hover");
 				selectedCards.push(this.id);
+				flipC.style.pointerEvents = "none";
 				gameHandler();
+				
 			}
 			
 			
@@ -123,6 +125,7 @@
 		this.unflip = function() {
 			this.isFlipped = 0;
 			flipC.classList.remove("hover");
+			flipC.style.pointerEvents = "auto";
 		}
 
 		this.create = function() {
@@ -178,6 +181,7 @@
 				for (var i = 1; i < allCards.length; i++) {
 	                if (allCards[i].isFlipped == 1 && allCards[i].isFound == 0) { // unflip only flipped cards that are not found
 	                	allCards[i].unflip();
+
 	                }
 	            }
 	        pauseThis = false;
