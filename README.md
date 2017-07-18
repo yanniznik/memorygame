@@ -8,6 +8,6 @@ Check it on [Codepen](https://codepen.io/yananas/pen/OgEdmN).
 David Walsch for the [CSS flip animation](https://davidwalsh.name/css-flip).
 
 # Screenshot 
-![Screenshot](https://github.com/yanniznik/memorygame/blob/master/assets/screenshot.png)
+![Screenshot](https://github.com/yanniznik/memorygame/blob/master/img/screenshot.png)
 
 
